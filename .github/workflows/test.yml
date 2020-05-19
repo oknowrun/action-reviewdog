@@ -53,3 +53,4 @@ jobs:
         uses: ./
         with:
           version: ${{matrix.version}}
+      - run: reviewdog -version
