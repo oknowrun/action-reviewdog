@@ -1,7 +1,7 @@
 const core = require("@actions/core");
 const github = require("@actions/github");
 const tc = require("@actions/tool-cache");
-const fetch = require("node-fetch");
+const fetch = require("cross-fetch");
 
 const versionRegex = /^(v)?([0-9]+\.[0-9]+\.[0-9]+)+$/;
 
@@ -49,9 +49,15 @@ async function fetchReviewdog(version = "0.10.0") {
 
 async function determineVersionToCache(requestedVersion = "latest") {
   if (requestedVersion === "latest") {
-    const response = await fetch(
+    const raw_response = await fetch(
       "https://api.github.com/repos/reviewdog/reviewdog/releases/latest"
-    ).then((response) => response.json());
+    )
+
+    if (raw_response.status >= 400) {
+        throw new Error("Bad response from GitHub API while resolving latest version")
+    }
+
+    const response = await raw_response.json()
     const latest_version = `${response.tag_name}`;
     const matches = latest_version.match(versionRegex);
 
