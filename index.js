@@ -38,8 +38,6 @@ function getReleaseURL(version = "0.10.0") {
 }
 
 async function fetchReviewdog(version = "0.10.0") {
-  const releaseUrl = getReleaseURL(version);
-
   const reviewdogPath = await tc.downloadTool(getReleaseURL(version));
   const reviewdogExtractedFolder = await tc.extractTar(
     reviewdogPath,
