@@ -1,7 +1,7 @@
 const core = require("@actions/core");
 const github = require("@actions/github");
 const tc = require("@actions/tool-cache");
-const fetch = require('node-fetch')
+const fetch = require("node-fetch");
 
 const versionRegex = /^(v)?([0-9]+\.[0-9]+\.[0-9]+)+$/;
 
@@ -18,14 +18,19 @@ function mapPlatform(platform) {
   }
 }
 
-function getURL(version = "0.10.0") {
+function getReleaseURL(version = "0.10.0") {
   return `https://github.com/reviewdog/reviewdog/releases/download/v${version}/reviewdog_${version}_${mapPlatform(
     process.platform
   )}_${process.arch}.tar.gz`;
 }
 
 async function fetchReviewdog(version = "0.10.0") {
-  const reviewdogPath = await tc.downloadTool(getURL(version));
+  const releaseUrl = getReleaseURL(version);
+
+  core.info(`Release version: ${version}`);
+  core.info(`URL: ${releaseUrl}`);
+
+  const reviewdogPath = await tc.downloadTool(getReleaseURL(version));
   const reviewdogExtractedFolder = await tc.extractTar(
     reviewdogPath,
     `/tmp/reviewdog-${version}-${process.platform}-${process.arch}`

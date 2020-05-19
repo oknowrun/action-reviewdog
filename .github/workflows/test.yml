@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: ./
   load_specific_version:
-    name: Loads v${matrix.version}
+    name: Loads specific version of reviewdog
     strategy:
       matrix:
         version: ["latest", "0.10.0"]
