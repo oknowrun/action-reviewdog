@@ -1,6 +1,7 @@
 const core = require("@actions/core");
 const github = require("@actions/github");
 const tc = require("@actions/tool-cache");
+const fetch = require('node-fetch')
 
 const versionRegex = /^(v)?([0-9]+\.[0-9]+\.[0-9]+)+$/;
 
