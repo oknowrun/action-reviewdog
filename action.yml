@@ -1,0 +1,10 @@
+name: "reviewdog"
+description: "A code review dog who keeps your codebase healthy."
+inputs:
+  version:
+    description: "reviewdog release to install"
+    required: true
+    default: latest
+runs:
+  using: "node12"
+  main: "index.js"
