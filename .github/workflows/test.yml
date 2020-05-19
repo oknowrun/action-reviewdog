@@ -19,6 +19,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: ./
+        with:
+          version: 0.10.0 # specify version to reduce API response glitch risk
       - run: reviewdog -version
   load_specific_version:
     name: Loads v${{matrix.version}}
@@ -33,3 +35,21 @@ jobs:
         with:
           version: ${{matrix.version}}
       - run: reviewdog -version
+  load_specific_version_from_cache:
+    name: Loads v${{matrix.version}} from cache
+    strategy:
+      matrix:
+        version: ["0.10.0"]
+      fail-fast: true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Initialize reviewdog@${{matrix.version}} cache
+        uses: ./
+        with:
+          version: ${{matrix.version}}
+      - run: reviewdog -version
+      - name: Use reviewdog@${{matrix.version}} from cache
+        uses: ./
+        with:
+          version: ${{matrix.version}}
