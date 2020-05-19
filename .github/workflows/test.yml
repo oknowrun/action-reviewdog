@@ -19,8 +19,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: ./
+      - run: reviewdog --help
   load_specific_version:
-    name: Loads specific version of reviewdog
+    name: Loads v${{matrix.version}}
     strategy:
       matrix:
         version: ["latest", "0.10.0"]
@@ -30,4 +31,5 @@ jobs:
       - uses: actions/checkout@v2
       - uses: ./
         with:
-          version: ${matrix.version}
+          version: ${{matrix.version}}
+      - run: reviewdog --help

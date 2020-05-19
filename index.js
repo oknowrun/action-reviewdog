@@ -40,9 +40,6 @@ function getReleaseURL(version = "0.10.0") {
 async function fetchReviewdog(version = "0.10.0") {
   const releaseUrl = getReleaseURL(version);
 
-  core.info(`Release version: ${version}`);
-  core.info(`URL: ${releaseUrl}`);
-
   const reviewdogPath = await tc.downloadTool(getReleaseURL(version));
   const reviewdogExtractedFolder = await tc.extractTar(
     reviewdogPath,
@@ -56,6 +53,8 @@ async function fetchReviewdog(version = "0.10.0") {
     "reviewdog",
     version
   );
+
+  core.info(`Added reviewdog@${version} to the cache`);
 
   return cachedPath;
 }
@@ -94,11 +93,19 @@ async function main() {
 
   const toolPath = tc.find("reviewdog", expectedCacheVersion);
   if (toolPath) {
+    core.info(`reviewdog@${expectedCacheVersion} avaiable from cache.`);
     core.addPath(toolPath);
   } else {
+    core.info(
+      `reviewdog@${expectedCacheVersion} not available from cache, going to initialize it now.`
+    );
     const cachedPath = await fetchReviewdog(expectedCacheVersion);
     core.addPath(cachedPath);
   }
+
+  core.info(
+    `reviewdog@${expectedCacheVersion} avaiable on $PATH as 'reviewdog'`
+  );
 }
 
 try {
