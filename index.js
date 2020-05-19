@@ -18,10 +18,23 @@ function mapPlatform(platform) {
   }
 }
 
+function mapArchitecture(arch) {
+  switch (arch) {
+    case "x64":
+      return "x86_64";
+    case "x32":
+      return "i386";
+    default:
+      throw new Error(
+        "Architecture could not be mapped to reviewdog architecture"
+      );
+  }
+}
+
 function getReleaseURL(version = "0.10.0") {
   return `https://github.com/reviewdog/reviewdog/releases/download/v${version}/reviewdog_${version}_${mapPlatform(
     process.platform
-  )}_${process.arch}.tar.gz`;
+  )}_${mapArchitecture(process.arch)}.tar.gz`;
 }
 
 async function fetchReviewdog(version = "0.10.0") {
@@ -51,13 +64,15 @@ async function determineVersionToCache(requestedVersion = "latest") {
   if (requestedVersion === "latest") {
     const raw_response = await fetch(
       "https://api.github.com/repos/reviewdog/reviewdog/releases/latest"
-    )
+    );
 
     if (raw_response.status >= 400) {
-        throw new Error("Bad response from GitHub API while resolving latest version")
+      throw new Error(
+        "Bad response from GitHub API while resolving latest version"
+      );
     }
 
-    const response = await raw_response.json()
+    const response = await raw_response.json();
     const latest_version = `${response.tag_name}`;
     const matches = latest_version.match(versionRegex);
 
