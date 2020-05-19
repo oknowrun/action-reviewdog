@@ -19,7 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: ./
-      - run: reviewdog --help
+      - run: reviewdog -version
   load_specific_version:
     name: Loads v${{matrix.version}}
     strategy:
@@ -32,4 +32,4 @@ jobs:
       - uses: ./
         with:
           version: ${{matrix.version}}
-      - run: reviewdog --help
+      - run: reviewdog -version
